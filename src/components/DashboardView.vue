@@ -4,9 +4,9 @@
   >
     <div class="flex flex-row items-center space-x-4 m-3">
       <div>Input:</div>
-      <input class="flex rounded" v-model="message" placeholder="enter here" />
+      <input class="flex rounded" v-model="inputNumber" placeholder="enter here" />
       <select class="flebasis-1/2" v-model="selectedInput">
-        <option v-for="option in inputOptions" :key="option" :value="option">
+        <option v-for="option in availableUnits" :key="option" :value="option">
           {{ option }}
         </option>
       </select>
@@ -14,9 +14,9 @@
 
     <div class="flex flex-row space-x-4 m-3">
       <div>Output:</div>
-      <div>{{ convert }}</div>
+      <div>{{ calculate }}</div>
       <select class="flebasis-1/2" v-model="selectedOutput">
-        <option v-for="option in outputOptions" :key="option" :value="option">
+        <option v-for="option in availableUnits" :key="option" :value="option">
           {{ option }}
         </option>
       </select>
@@ -27,14 +27,14 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
 
-// we should use KG as the standard point of reference
-// every unit is defined as its ratio to KG
-
+interface IWeightChart {
+  [index: string]: number
+}
 // how many kgs is 1 X
-const weightUnitsToKilo = {
+const weightUnitsToKilo: IWeightChart = {
+  kg: 1.0,
   'Implerial Ton': 1016.05,
   Tonne: 1000.0,
-  kg: 1.0,
   g: 0.001,
   mg: 1e-6,
   μg: 1e-9,
@@ -42,28 +42,26 @@ const weightUnitsToKilo = {
   stone: 6.35029,
   ounce: 0.0283495089275588
 }
-const inputOptions = ref(Object.keys(weightUnitsToKilo))
-const outputOptions = ref(Object.keys(weightUnitsToKilo))
 
-const selectedInput = ref(inputOptions.value[0])
-const selectedOutput = ref(outputOptions.value[0])
+const availableUnits = ref(Object.keys(weightUnitsToKilo))
+const selectedInput = ref(availableUnits.value[0])
+const selectedOutput = ref(availableUnits.value[1])
 
-const message = ref(0)
+const inputNumber = ref(0)
 
-// const getOther = computed(() => {
-//   return selectedInput.value === 'KG' ? 'LB' : 'KG'
-// })
-
-const convert = computed(() => {
-  const kgToLbs = 2.20462
-  let ret
-  if (selectedInput.value === 'KG') {
-    ret = message.value * kgToLbs
-  } else {
-    ret = message.value / kgToLbs
+const swap = () => {
+  if (selectedInput.value === selectedOutput.value) {
+    let temp = selectedInput.value
+    selectedInput.value = selectedOutput.value
+    selectedOutput.value = temp
   }
+}
 
-  return ret.toPrecision(4)
+const calculate = computed(() => {
+  let ret =
+    inputNumber.value *
+    (weightUnitsToKilo[selectedInput.value] / weightUnitsToKilo[selectedOutput.value])
+  return ret.toFixed(4)
 })
 </script>
 
