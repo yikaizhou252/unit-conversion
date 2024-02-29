@@ -5,7 +5,7 @@
     <div class="flex flex-row items-center space-x-4 m-3">
       <div>Input:</div>
       <input class="flex rounded" v-model="inputNumber" placeholder="enter here" />
-      <select class="flebasis-1/2" v-model="selectedInput">
+      <select class="flebasis-1/2" :value="selectedInput" @change="changeUnit($event, 'input')">
         <option v-for="option in availableUnits" :key="option" :value="option">
           {{ option }}
         </option>
@@ -15,7 +15,7 @@
     <div class="flex flex-row space-x-4 m-3">
       <div>Output:</div>
       <div>{{ calculate }}</div>
-      <select class="flebasis-1/2" v-model="selectedOutput">
+      <select class="flebasis-1/2" :value="selectedOutput" @change="changeUnit($event, 'output')">
         <option v-for="option in availableUnits" :key="option" :value="option">
           {{ option }}
         </option>
@@ -44,17 +44,40 @@ const weightUnitsToKilo: IWeightChart = {
 }
 
 const availableUnits = ref(Object.keys(weightUnitsToKilo))
+
 const selectedInput = ref(availableUnits.value[0])
 const selectedOutput = ref(availableUnits.value[1])
+
+const changeUnit = (event: any, currentUnit: string) => {
+  let newUnit = event.target.value
+
+  if (currentUnit === 'input') {
+    console.log('selectedInput', selectedInput.value)
+    console.log('new', event.target.value)
+    if (newUnit === selectedOutput.value) {
+      swap()
+    } else {
+      selectedInput.value = newUnit
+    }
+  } else if (currentUnit === 'output') {
+    console.log('selectedOutput', selectedOutput.value)
+    console.log('new', event.target.value)
+    if (newUnit === selectedInput.value) {
+      swap()
+    } else {
+      selectedOutput.value = newUnit
+    }
+  }
+
+  currentUnit = event.target.value
+}
 
 const inputNumber = ref(0)
 
 const swap = () => {
-  if (selectedInput.value === selectedOutput.value) {
-    let temp = selectedInput.value
-    selectedInput.value = selectedOutput.value
-    selectedOutput.value = temp
-  }
+  let temp = selectedInput.value
+  selectedInput.value = selectedOutput.value
+  selectedOutput.value = temp
 }
 
 const calculate = computed(() => {
