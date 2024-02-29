@@ -44,40 +44,27 @@ const weightUnitsToKilo: IWeightChart = {
 }
 
 const availableUnits = ref(Object.keys(weightUnitsToKilo))
-
 const selectedInput = ref(availableUnits.value[0])
 const selectedOutput = ref(availableUnits.value[1])
+const inputNumber = ref(0)
 
 const changeUnit = (event: any, currentUnit: string) => {
   let newUnit = event.target.value
 
-  if (currentUnit === 'input') {
-    console.log('selectedInput', selectedInput.value)
-    console.log('new', event.target.value)
-    if (newUnit === selectedOutput.value) {
-      swap()
-    } else {
+  if (
+    (currentUnit === 'input' && newUnit === selectedOutput.value) ||
+    (currentUnit === 'output' && newUnit === selectedInput.value)
+  ) {
+    let temp = selectedInput.value
+    selectedInput.value = selectedOutput.value
+    selectedOutput.value = temp
+  } else {
+    if (currentUnit === 'input') {
       selectedInput.value = newUnit
-    }
-  } else if (currentUnit === 'output') {
-    console.log('selectedOutput', selectedOutput.value)
-    console.log('new', event.target.value)
-    if (newUnit === selectedInput.value) {
-      swap()
-    } else {
+    } else if (currentUnit === 'output') {
       selectedOutput.value = newUnit
     }
   }
-
-  currentUnit = event.target.value
-}
-
-const inputNumber = ref(0)
-
-const swap = () => {
-  let temp = selectedInput.value
-  selectedInput.value = selectedOutput.value
-  selectedOutput.value = temp
 }
 
 const calculate = computed(() => {
