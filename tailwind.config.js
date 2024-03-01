@@ -8,6 +8,10 @@ export default {
     colors: {
       'lightBlue': '#bfdbfe'
     },
+    fontFamily: {
+      'outputDigits': 'Chakra Petch',
+      'heading': 'Nanum Pen Script',  
+    },
     extend: {},
   },
   plugins: [],

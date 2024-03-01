@@ -4,18 +4,18 @@
   >
     <div class="flex flex-row items-center space-x-4 m-3">
       <div>Input:</div>
-      <input class="flex rounded" v-model="inputNumber" placeholder="enter here" />
-      <select class="flebasis-1/2" :value="selectedInput" @change="changeUnit($event, 'input')">
+      <input class="flex rounded text-center shadow-md" v-model="inputNumber" placeholder="enter here" />
+      <select class="flebasis-1/2 rounded shadow-md " :value="selectedInput" @change="changeUnit($event, 'input')">
         <option v-for="option in availableUnits" :key="option" :value="option">
           {{ option }}
         </option>
       </select>
     </div>
 
-    <div class="flex flex-row space-x-4 m-3">
-      <div>Output:</div>
-      <div>{{ calculate }}</div>
-      <select class="flebasis-1/2" :value="selectedOutput" @change="changeUnit($event, 'output')">
+    <div class="flex flex-row items-baseline space-x-4 m-3">
+      <h1>Output:</h1>
+      <h1  class=" font-outputDigits text-2xl font-extrabold">{{ calculate }}</h1>
+      <select class="flebasis-1/2 rounded shadow-md" :value="selectedOutput" @change="changeUnit($event, 'output')">
         <option v-for="option in availableUnits" :key="option" :value="option">
           {{ option }}
         </option>

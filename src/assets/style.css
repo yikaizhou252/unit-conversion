@@ -1,3 +1,9 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@font-face {
+  font-family: 'Nanum Pen Script';
+  src:
+    url(./fonts/NanumPenScript-Regular.ttf) format('ttf');
+}
